@@ -1,5 +1,5 @@
-# neural-network
-Neural Network created in C++. Based heavily off <http://ai-junkie.com> (Smart Sweepers)  
+# space-invaders-neural-network
+A neural network trying to learn a simple space invaders
 
 # building and running
 ```
