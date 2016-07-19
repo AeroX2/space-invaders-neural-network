@@ -1,20 +1,21 @@
-#ifndef MINE_H
-#define MINE_H
+#ifndef ALIEN_H
+#define ALIEN_H
 
 #include <SDL2/SDL.h>
 
 #include "../constants.hpp"
 #include "vector.hpp"
 
-class Mine
+class Alien
 {
 	public:
-		Mine();
+		Alien(Vector p);
+		void update();
 		void draw(SDL_Renderer* renderer);
-		void new_position();
 		Vector& get();
 	private:
 		Vector p;
+		Vector v;
 		SDL_Rect rectangle;
 };
 

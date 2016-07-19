@@ -29,12 +29,10 @@ vector<Brain> Controller::epoch(vector<Brain> population)
 	vector<Brain> new_population = vector<Brain>();
 
 	//Elitism
-	new_population.push_back(population[population.size()-1]);
-	new_population.push_back(population[population.size()-2]);
-	new_population.push_back(population[population.size()-3]);
-	new_population.push_back(population[population.size()-4]);
+	for (int i = 1; i <= ELITES; i++)
+		new_population.push_back(population[population.size()-i]);
 
-	for (int i = 0; i < round((population.size()-4) / 2); i++)
+	for (int i = 0; i < round((population.size()-ELITES) / 2); i++)
 	{
 		Brain mum = roulette(population,total_fitness);
 		Brain dad = roulette(population,total_fitness);

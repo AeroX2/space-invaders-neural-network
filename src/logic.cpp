@@ -5,24 +5,25 @@ Logic::Logic()
 	//Seed random number generator
 	srand(time(NULL));	
 
-	int rand_x = 0;
-	int rand_y = 0;
-	for (int i = 0; i < ALIEN_LEN; i++)
+	for (int i = 0; i < ALIEN_POP_HEIGHT; i++)
 	{
-		Alien new_alien = Alien();
-		aliens.push_back(new_alien);
+		for (int ii = 0; ii < ALIEN_POP_WIDTH; ii++)
+		{
+			Vector p = Vector(ii * ALIEN_WIDTH + ALIEN_SPACING,i * ALIEN_HEIGHT + ALIEN_SPACING);
+			Alien new_alien = Alien(p);
+			aliens.push_back(new_alien);
+		}	
 	}
 
 	Vector p;
 	Brain new_brain;
-	for (int i = 0; i < POPULATION; i++)
+	for (int i = 0; i < CANNON_POPULATION; i++)
 	{
-		rand_x = rand() % SCREEN_WIDTH;
-		rand_y = rand() % SCREEN_HEIGHT;
-		p = Vector(rand_x, rand_y);
+		int rand_x = rand() % SCREEN_WIDTH;
+		p = Vector(rand_x, CANNON_SPACER);
 		new_brain = Brain();
-		Cannon* new_cannon = Cannon::create(p, new_brain);
-		cannons.push_back(reference_wrapper<Cannon>(*new_cannon));
+		Cannon new_cannon = Cannon(p, new_brain);
+		cannons.push_back(new_cannon);
 	}
 
 	/*rand_x = rand() % SCREEN_WIDTH;
@@ -30,8 +31,8 @@ Logic::Logic()
 	p = Vector(rand_x, rand_y);
 	new_brain = Brain();
 
-	Control_Cannon* control_cannon = Control_Cannon::create(p,new_brain);
-	cannons.push_back(reference_wrapper<Cannon>(*control_cannon));*/
+	//Control_Cannon* control_cannon = Control_Cannon::create(p,new_brain);
+	//cannons.push_back(reference_wrapper<Cannon>(*control_cannon));*/
 
 	ticks = 0;
 	max_fitness = 0;
@@ -46,8 +47,8 @@ void Logic::update(double delta)
 		alien.update();
 		for (Bullet& bullet : bullets)
 		{
-			alien_p = alien.get();
-			bullet_p = bullet.get();
+			Vector alien_p = alien.get();
+			Vector bullet_p = bullet.get();
 			if (alien_p.x - 50 < bullet_p.x && 
 				alien_p.x + 50 > bullet_p.x && 
 				alien_p.y - 50 < bullet_p.y && 
@@ -63,14 +64,14 @@ void Logic::update(double delta)
 		}
 	}
 
-	for (auto reference : cannons)
+	for (int i = 0; i < cannons.size(), i++)
 	{
-		Cannon& cannon = reference.get();
+		Cannon& cannon = cannons[i].get();
 		cannon.update(aliens);
-
 		if (cannon.is_firing())
 		{
-			Bullet bullet
+			Vector p = Vector(cannon.get().x, cannon.get().y);
+			Bullet bullet = Bullet(p, i);
 		}
 		
 		if (cannon.get_brain().get_fitness() > max_fitness)

@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "constants.hpp"
+#include "config.hpp"
 #include "logic.hpp"
 
 using namespace std;

@@ -63,6 +63,14 @@ bool init()
 	if (window == NULL) return true;
 	renderer = SDL_CreateRenderer(window,0,SDL_RENDERER_ACCELERATED);
 	Plotter::init(0,0,10);
+
+	if (Config::read_from_file("config.txt")) cout << "Using values from files" << endl;
+	else cout << "Failed to read from file, using defaults" << endl;
+
+	cout << "Mutation " << MUTATION_CHANCE << endl;
+	cout << "Combine " << COMBINE_CHANCE << endl;
+ 	cout << "Max perturb " << MAX_PERTURB << endl;
+
 	return false;
 }
 
