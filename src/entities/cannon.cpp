@@ -5,8 +5,8 @@ Cannon::Cannon(Vector p, Brain brain)
 	this->p = p;
 	this->brain = brain;
 
-	rectangle.w = 10;
-	rectangle.h = 10;
+	rectangle.w = CANNON_WIDTH;
+	rectangle.h = CANNON_HEIGHT;
 
 	firing = false;
 	best = false;
@@ -14,6 +14,7 @@ Cannon::Cannon(Vector p, Brain brain)
 
 void Cannon::update(vector<Alien> &aliens)
 {
+	//TODO Shouldn't this matrix always be a constants size?
 	Matrix matrix = Matrix(1,aliens.size()*2+1);//* bullets.size() * 2 + 1);
 
 	int i = 0;
@@ -39,10 +40,11 @@ void Cannon::update(vector<Alien> &aliens)
 
 	if (v.x > MAX_CANNON_SPEED) v.x = MAX_CANNON_SPEED; 
 	else if (v.x < -MAX_CANNON_SPEED) v.x = -MAX_CANNON_SPEED; 
-	if (v.y > MAX_CANNON_SPEED) v.y = MAX_CANNON_SPEED; 
-	else if (v.y < -MAX_CANNON_SPEED) v.y = -MAX_CANNON_SPEED; 
 
 	p += v;
+	if (p.x < 0) p.x = SCREEN_WIDTH;
+	else if (p.x > SCREEN_WIDTH) p.x = 0;
+
 	rectangle.x = round(p.x);
 	rectangle.y = round(p.y);
 }
@@ -50,8 +52,8 @@ void Cannon::update(vector<Alien> &aliens)
 void Cannon::draw(SDL_Renderer* renderer)
 {
 	if (is_best()) SDL_SetRenderDrawColor(renderer, RED, 255);
-	else SDL_SetRenderDrawColor(renderer, GREEN, 255);
-	SDL_RenderDrawRect(renderer, &rectangle);
+	else SDL_SetRenderDrawColor(renderer, BLUE, 255);
+	SDL_RenderFillRect(renderer, &rectangle);
 }
 
 void Cannon::new_position()
@@ -94,3 +96,9 @@ bool Cannon::is_firing()
 {
 	return firing;
 }
+
+Cannon* Cannon::create(Vector p, Brain brain)
+{
+	return new Cannon(p, brain);
+}
+

@@ -14,7 +14,8 @@ class Vector;
 class Cannon
 {
 	public:
-		Cannon(Vector p, Brain brain);
+		//Make constructor protected so we are sure nothing else is creating Cannon
+		static Cannon* create(Vector p, Brain brain);
 		virtual void update(vector<Alien> &aliens);
 		virtual void draw(SDL_Renderer* renderer);
 		void new_position();
@@ -30,6 +31,7 @@ class Cannon
 
 		bool is_firing();
 	protected:
+		Cannon(Vector p, Brain brain);
 		bool firing;
 		bool best;
 		Vector v;

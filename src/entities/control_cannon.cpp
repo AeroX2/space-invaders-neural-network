@@ -15,3 +15,8 @@ void Control_Cannon::update(Vector mine_location)
 void Control_Cannon::draw(SDL_Renderer* renderer) 
 {
 }
+
+Control_Cannon* Control_Cannon::create(Vector p, Brain b)
+{
+	return new Control_Cannon(p, b);
+}

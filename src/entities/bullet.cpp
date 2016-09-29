@@ -9,11 +9,13 @@ Bullet::Bullet(Vector p, int id)
 	rectangle.y = p.y;
 	rectangle.w = BULLET_WIDTH;
 	rectangle.h = BULLET_HEIGHT;
+
+	v.y = BULLET_SPEED;
 }
 
 void Bullet::update() 
 {
-	p.y += v.y;	
+	p.y -= v.y;	
 	rectangle.y = round(p.y);
 }
 

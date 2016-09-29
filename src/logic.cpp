@@ -9,8 +9,10 @@ Logic::Logic()
 	{
 		for (int ii = 0; ii < ALIEN_POP_WIDTH; ii++)
 		{
-			Vector p = Vector(ii * ALIEN_WIDTH + ALIEN_SPACING,i * ALIEN_HEIGHT + ALIEN_SPACING);
-			Alien new_alien = Alien(p);
+			int x = ALIEN_STARTING_X + ii * (ALIEN_WIDTH + ALIEN_SPACING);
+			int y = i * (ALIEN_HEIGHT + ALIEN_SPACING);
+			Vector p = Vector(x,y);
+			Alin new_alien = Alien(p);
 			aliens.push_back(new_alien);
 		}	
 	}
@@ -20,10 +22,10 @@ Logic::Logic()
 	for (int i = 0; i < CANNON_POPULATION; i++)
 	{
 		int rand_x = rand() % SCREEN_WIDTH;
-		p = Vector(rand_x, CANNON_SPACER);
+		p = Vector(rand_x, SCREEN_HEIGHT-CANNON_HEIGHT-CANNON_SPACER);
 		new_brain = Brain();
-		Cannon new_cannon = Cannon(p, new_brain);
-		cannons.push_back(new_cannon);
+		Cannon* new_cannon = Cannon::create(p, new_brain);
+		cannons.push_back(reference_wrapper<Cannon>(*new_cannon));
 	}
 
 	/*rand_x = rand() % SCREEN_WIDTH;
@@ -40,14 +42,31 @@ Logic::Logic()
 
 void Logic::update(double delta)
 {
-	for (Bullet& bullet : bullets) bullet.update();
+	vector<int> remove_bullets;
+	for (int i = 0; i < bullets.size(); i++) 
+	{
+		Bullet& bullet = bullets.at(i);
+		bullet.update();
+		if (bullet.get().y < 0) remove_bullets.push_back(i);
+	}
 
 	for (Alien& alien : aliens)
 	{
 		alien.update();
-		for (Bullet& bullet : bullets)
+
+		Vector alien_p = alien.get();
+		if (alien_p.x <= 0 || alien_p.x >= SCREEN_WIDTH)
 		{
-			Vector alien_p = alien.get();
+			for (Alien& alien2 : aliens)
+			{
+				alien2.getv().x *= -1;
+				alien2.get().y += ALIEN_HEIGHT;
+			}
+		}
+
+		for (int i = 0; i < bullets.size(); i++) 
+		{
+			Bullet& bullet = bullets.at(i);
 			Vector bullet_p = bullet.get();
 			if (alien_p.x - 50 < bullet_p.x && 
 				alien_p.x + 50 > bullet_p.x && 
@@ -59,19 +78,25 @@ void Logic::update(double delta)
 				if (distance < HIT_DISTANCE)
 				{
 					cannons[bullet.get_id()].get().get_brain().increase_fitness(1);
+					remove_bullets.push_back(i);
 				}
 			}	
 		}
 	}
 
-	for (int i = 0; i < cannons.size(), i++)
+	for (int bullet : remove_bullets) bullets.erase(bullets.begin()+bullet);
+
+	for (int i = 0; i < cannons.size(); i++)
 	{
 		Cannon& cannon = cannons[i].get();
 		cannon.update(aliens);
 		if (cannon.is_firing())
 		{
+			//cout << "Cannon " << i << " firing" << endl;
 			Vector p = Vector(cannon.get().x, cannon.get().y);
 			Bullet bullet = Bullet(p, i);
+			//TODO If fired, don't fire
+			bullets.push_back(bullet);
 		}
 		
 		if (cannon.get_brain().get_fitness() > max_fitness)
@@ -85,12 +110,9 @@ void Logic::update(double delta)
 			cannon.set_best(true);
 		}
 
-		cannon_p = cannon.get();
+		Vector cannon_p = cannon.get();
 		if (cannon_p.x > SCREEN_WIDTH) cannon_p.x = 0;
 		else if (cannon_p.x < 0) cannon_p.x = SCREEN_WIDTH;
-
-		//TODO Probably don't need this test later
-		cannon.set(cannon_p);
 	}
 
 	ticks += 1;

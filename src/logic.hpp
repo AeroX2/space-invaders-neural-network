@@ -2,6 +2,8 @@
 #define LOGIC_H
 
 #include <memory>
+#include <functional>
+
 #include "entities/alien.hpp"
 #include "entities/cannon.hpp"
 #include "entities/control_cannon.hpp"
@@ -22,8 +24,8 @@ class Logic
 		void draw(SDL_Renderer* renderer);
 	private:
 		vector<reference_wrapper<Cannon>> cannons;
-		vector<Bullet> bullets;
 		vector<Alien> aliens;
+		vector<Bullet> bullets;
 		int ticks;
 		int max_fitness;
 };
