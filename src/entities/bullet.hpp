@@ -13,6 +13,7 @@ class Bullet
 {
 	public:
 		Bullet(Vector p, int id);
+		virtual ~Bullet() {}
 		virtual void update();
 		virtual void draw(SDL_Renderer* renderer);
 		Vector& get();

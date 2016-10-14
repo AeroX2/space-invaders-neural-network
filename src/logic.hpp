@@ -6,13 +6,12 @@
 
 #include "entities/alien.hpp"
 #include "entities/cannon.hpp"
-#include "entities/control_cannon.hpp"
 #include "network/brain.hpp"
 #include "network/matrix.hpp"
 
 #include "controller.hpp"
 
-class SDL_Renderer;
+struct SDL_Renderer;
 
 using namespace std;
 
@@ -20,14 +19,17 @@ class Logic
 {
 	public:
 		Logic();
-		void update(double delta);
+		void update();
 		void draw(SDL_Renderer* renderer);
 	private:
+		void reset_aliens();
 		vector<reference_wrapper<Cannon>> cannons;
 		vector<Alien> aliens;
 		vector<Bullet> bullets;
+
 		int ticks;
 		int max_fitness;
+		size_t current_player;
 };
 
 #endif

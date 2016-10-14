@@ -12,21 +12,27 @@ using namespace std;
 
 class Plotter
 {
-	static vector<float> points;
-
 	public:
-		static void init(float start_x, float start_y, float step_x);
+		static void init(float step_x);
 		static void draw(SDL_Renderer* renderer);
 
-		static void add_point(float y);
+		static void new_line(unsigned char r, unsigned char g, unsigned char b);
+		static void add_point(int id, float y, bool ignore_largest=true);
 		static void resize(float blub);
 		static bool is_dirty();
 	private:
+		static vector<vector<float>> points;
+		static vector<vector<float>> average_points;
+		static vector<float> averages;
+		static vector<SDL_Color> colors;
+
 		static bool dirty;
-		static int start_x;
 		static int step_x;
+
 		static float scale_x;
 		static float scale_y;
+		static float largest_y;
+		static float average;
 };
 
 #endif

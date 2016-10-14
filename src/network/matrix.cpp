@@ -1,9 +1,7 @@
 #include "matrix.hpp"
 
-Matrix::Matrix(int width, int height)
+Matrix::Matrix(int width, int height) : width(width), height(height)
 {
-	this->width = width;
-	this->height = height;
 	zero_fill();
 }
 
@@ -23,9 +21,9 @@ void Matrix::set_by_row(vector<float> other_matrix)
 	{
 		for (int x = 0; x < get_width(); x++)
 		{
-			set(x,y,other_matrix[y*get_width()+x]);
+			set(x,y,other_matrix.at(y*get_width()+x));
 		}
-	}	
+	}
 }
 
 void Matrix::set_by_col(vector<float> other_matrix)
@@ -34,9 +32,9 @@ void Matrix::set_by_col(vector<float> other_matrix)
 	{
 		for (int x = 0; x < get_width(); x++)
 		{
-			set(x,y,other_matrix[x*get_height()+y]);
+			set(x,y,other_matrix.at(x*get_height()+y));
 		}
-	}	
+	}
 }
 
 void Matrix::zero_fill()
@@ -47,13 +45,24 @@ void Matrix::zero_fill()
 void Matrix::add_bias()
 {
 	height++;
-	matrix.push_back(vector<float>());	
+	matrix.push_back(vector<float>());
 	matrix[matrix.size()-1].push_back(-1);
 }
 
 Matrix Matrix::add(Matrix other_matrix)
 {
-	return Matrix(0,0);
+	if (get_width() != other_matrix.get_width()) throw runtime_error("Matrix width does not match");
+	if (get_height() != other_matrix.get_height()) throw runtime_error("Matrix height does not match");
+
+	Matrix new_matrix = Matrix(get_width(), get_height());
+	for (int y = 0; y < get_height(); y++)
+	{
+		for (int x = 0; x < get_width(); x++)
+		{
+			new_matrix.set(x,y,get(x,y) + other_matrix.get(x,y));
+		}
+	}
+	return new_matrix;
 }
 
 Matrix Matrix::multiply(Matrix other_matrix)
@@ -89,16 +98,16 @@ void Matrix::apply(float(*func)(float))
 
 void Matrix::print()
 {
-	for (int i = 0; i < matrix.size(); i++)
+	for (int y = 0; y < get_height(); y++)
 	{
 		cout << "[ ";
-		for (int ii = 0; ii < matrix[i].size(); ii++)
+		for (int x = 0; x < get_width(); x++)
 		{
-			cout << matrix[i][ii] << " ";
+			cout << get(x,y) << " ";
 		}
-		cout << "]" << endl;
+		cout << "]" << '\n';
 	}
-	cout << endl;
+	cout << '\n';
 }
 
 int Matrix::get_width()
@@ -109,6 +118,11 @@ int Matrix::get_width()
 int Matrix::get_height()
 {
 	return height;
+}
+
+int Matrix::size()
+{
+	return get_width() * get_height();
 }
 
 vector<vector<float>> Matrix::get_matrix()

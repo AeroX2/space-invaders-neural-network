@@ -1,26 +1,26 @@
 #include "vector.hpp"
 
-Vector::Vector(double x, double y, bool random)
+Vector::Vector(double x, double y)
 {
 	this->x = x;
 	this->y = y;
 }
 
-Vector Vector::operator+(const Vector &rhs)
+Vector Vector::operator+(const Vector rhs)
 {
 	Vector new_vector(this->x, this->y);
 	new_vector += rhs;
 	return new_vector;
 }
 
-Vector Vector::operator-(const Vector &rhs)
+Vector Vector::operator-(const Vector rhs)
 {
 	Vector new_vector(this->x, this->y);
 	new_vector -= rhs;
 	return new_vector;
 }
 
-Vector Vector::operator*(const Vector& rhs)
+Vector Vector::operator*(const Vector rhs)
 {
 	Vector new_vector(this->x, this->y);
 	new_vector *= rhs;
@@ -75,6 +75,11 @@ Vector Vector::normalise()
 	new_vector.x = new_vector.x / length;
 	new_vector.y = new_vector.y / length;
 	return new_vector;
+}
+
+Vector Vector::copy()
+{
+	return Vector(this->x, this->y);
 }
 
 void Vector::print()

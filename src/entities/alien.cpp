@@ -26,11 +26,6 @@ void Alien::draw(SDL_Renderer* renderer)
 	SDL_RenderFillRect(renderer, &rectangle);
 }
 
-void Alien::new_position()
-{
-	//TODO Write this
-}
-
 Vector& Alien::get()
 {
 	return p;
@@ -40,4 +35,3 @@ Vector& Alien::getv()
 {
 	return v;
 }
-

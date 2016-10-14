@@ -4,3 +4,7 @@ analysis.txt
 gmon.out
 neural_network
 Makefile
+cmake_install.cmake
+*.dll
+*.exe
+*.zip

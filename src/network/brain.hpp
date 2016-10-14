@@ -2,6 +2,7 @@
 #define BRAIN_H
 
 #include <vector>
+#include <math.h>
 
 #include "../constants.hpp"
 #include "../utils.hpp"
@@ -14,17 +15,17 @@ class Brain
 		Matrix update(Matrix other_matrix);
 
 		void mutate();
-		void combine(Brain other_brain, int index);
+		void combine_crossover(Brain other_brain, int index);
+		void combine_two_point(Brain other_brain, int index1, int index2);
 
 		vector<Matrix>& get_genes();
-		int get_fitness();
-		void set_fitness(int fitness);
-		void increase_fitness(int fitness);
+		float& get_fitness();
+		void set_fitness(float fitness);
 
 		vector<float> random_array(int length);
 	private:
 		vector<Matrix> genes;
-		int fitness;
+		float fitness;
 };
 
 #endif

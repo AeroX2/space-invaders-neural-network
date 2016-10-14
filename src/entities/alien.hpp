@@ -12,7 +12,6 @@ class Alien
 		Alien(Vector p);
 		void update();
 		void draw(SDL_Renderer* renderer);
-		void new_position();
 		Vector& get();
 		Vector& getv();
 	private:

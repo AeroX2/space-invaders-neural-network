@@ -9,20 +9,25 @@ Cannon::Cannon(Vector p, Brain brain)
 	rectangle.h = CANNON_HEIGHT;
 
 	firing = false;
+	fired = false;
 	best = false;
 }
 
-void Cannon::update(vector<Alien> &aliens)
+void Cannon::update(Alien alien)
 {
 	//TODO Shouldn't this matrix always be a constants size?
-	Matrix matrix = Matrix(1,aliens.size()*2+1);//* bullets.size() * 2 + 1);
+	Matrix matrix = Matrix(1,7+1);//* bullets.size() * 2 + 1);
 
 	int i = 0;
-	for (Alien alien : aliens)
-	{
-		matrix.set(0,i++,alien.get().x);
-		matrix.set(0,i++,alien.get().y);
-	}	
+
+	matrix.set(0,i++,p.x);
+	matrix.set(0,i++,p.y);
+	matrix.set(0,i++,fired);
+
+	matrix.set(0,i++,alien.get().x);
+	matrix.set(0,i++,alien.get().y);
+	matrix.set(0,i++,alien.getv().x);
+	matrix.set(0,i++,alien.getv().y);
 
 	/*for (Bullet bullet: bullets)
 	{
@@ -42,8 +47,8 @@ void Cannon::update(vector<Alien> &aliens)
 	else if (v.x < -MAX_CANNON_SPEED) v.x = -MAX_CANNON_SPEED; 
 
 	p += v;
-	if (p.x < 0) p.x = SCREEN_WIDTH;
-	else if (p.x > SCREEN_WIDTH) p.x = 0;
+	if (p.x < 0) p.x = 0;
+	else if (p.x > SCREEN_WIDTH-CANNON_WIDTH) p.x = SCREEN_WIDTH-CANNON_WIDTH;
 
 	rectangle.x = round(p.x);
 	rectangle.y = round(p.y);
@@ -58,8 +63,7 @@ void Cannon::draw(SDL_Renderer* renderer)
 
 void Cannon::new_position()
 {
-	int rand_x = rand() % SCREEN_WIDTH;
-	this->p = Vector(rand_x, CANNON_SPACER);
+	this->p = Vector(SCREEN_WIDTH / 2, SCREEN_HEIGHT - CANNON_HEIGHT - CANNON_SPACER);
 }
 
 Vector& Cannon::get()
@@ -95,6 +99,21 @@ void Cannon::set_best(bool best)
 bool Cannon::is_firing()
 {
 	return firing;
+}
+
+void Cannon::set_firing(bool firing )
+{
+	this->firing = firing ;
+}
+
+bool Cannon::is_fired()
+{
+	return fired;
+}
+
+void Cannon::set_fired(bool fired)
+{
+	this->fired = fired;
 }
 
 Cannon* Cannon::create(Vector p, Brain brain)
