@@ -89,3 +89,8 @@ bool Plotter::is_dirty()
 {
 	return dirty;
 }
+
+void Plotter::set_dirty()
+{
+	Plotter::dirty = true;
+}

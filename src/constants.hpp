@@ -15,8 +15,8 @@ const static int ALIEN_STARTING_X = 100;
 const static int ALIEN_STARTING_Y = 20;
 const static int ALIEN_SPACING = 12;
 const static int ALIEN_SPEED = 15;
-const static int ALIEN_TICKS_TO_MOVE = 100;
 const static int MAX_ALIEN_BULLETS = 10;
+extern int ALIEN_TICKS_TO_MOVE;
 
 const static int CANNON_WIDTH = 16;
 const static int CANNON_HEIGHT = 8;
@@ -33,20 +33,22 @@ const static int CANNON_POPULATION = 30;
 const static int ALIEN_POP_WIDTH = (SCREEN_WIDTH - 2 * ALIEN_STARTING_X) / (ALIEN_WIDTH + ALIEN_SPACING);
 const static int ALIEN_POP_HEIGHT = 3;
 
-extern int ROLLING_AVERAGE;
 extern bool TOURNAMENT;
 extern bool COMBINE_TWO_POINT;
+
+extern int ROLLING_AVERAGE;
+extern int TOURNAMENT_SIZE;
 
 extern float REWARD;
 extern float PUNISHMENT;
 
-const static int EPOCH_TICK_OVER = 2000;
+const static int ELITES = 4;
+//const static int EPOCH_TICK_OVER = 2000;
 const static int HIT_DISTANCE = ALIEN_WIDTH/2; 
 
 extern float MUTATION_CHANCE;
 extern float COMBINE_CHANCE;
 extern float MAX_PERTURB;
-static int ELITES = 4;
 
 const static int BRAIN_INPUT_LEN = 7;
 const static int BRAIN_OUTPUT_LEN = 2;

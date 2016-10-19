@@ -1,9 +1,22 @@
 #include "logic.hpp"
+#include "main.hpp"
+
 Logic::Logic()
 {
-	//Seed random number generator
-	srand(time(NULL));	
+	ticks = 0;
+	max_fitness = 0;
+}
 
+Logic::~Logic()
+{
+	for (auto reference : cannons)
+	{
+		delete &reference.get();
+	}
+}
+
+void Logic::init()
+{
 	reset_aliens();
 
 	Vector p;
@@ -61,7 +74,7 @@ void Logic::update()
 
 		if (ticks > ALIEN_TICKS_TO_MOVE) alien.update();
 
-		if (alien_p.x <= 0 || alien_p.x >= SCREEN_WIDTH-ALIEN_WIDTH)
+		if (alien_p.x <= 0 || alien_p.x >= SCREEN_WIDTH)
 		{
 			for (Alien& alien2 : aliens)
 			{
@@ -70,10 +83,11 @@ void Logic::update()
 				alien2.get().y += ALIEN_HEIGHT;
 			}
 		}
-		if (alien_p.y >= SCREEN_HEIGHT-ALIEN_HEIGHT) 
+		if (alien_p.y >= SCREEN_HEIGHT) 
 		{
 			current_player++;
 			remove_aliens.clear();
+			remove_bullets.clear();
 			reset_aliens();
 			break;
 		}
@@ -94,7 +108,7 @@ void Logic::update()
 					for (Alien& alien2 : aliens) alien2.getv().x *= 1.02;
 
 					cannons[bullet.get_id()].get().set_fired(false);
-					cannons[bullet.get_id()].get().get_brain().increase_fitness(1);
+					cannons[bullet.get_id()].get().get_fitness() += 1;
 
 					remove_bullets.push_back(bullet_id);
 					remove_aliens.push_back(alien_id);
@@ -119,23 +133,27 @@ void Logic::update()
 		if (bullet.get().y < 0) 
 		{
 			cannons[bullet.get_id()].get().set_fired(false);
+			float& fitness = cannons[bullet.get_id()].get().get_fitness();
+			if (fitness > 0.01) fitness *= 0.65;
 			remove_bullets.push_back(bullet_id);
 		}
 	}
 
-	sort(remove_bullets.begin(), remove_bullets.end());
+	//sort(remove_bullets.begin(), remove_bullets.end());
 	remove_bullets.erase(unique(remove_bullets.begin(), remove_bullets.end()), remove_bullets.end());
 
-	sort(remove_aliens.begin(), remove_aliens.end());
+	//sort(remove_aliens.begin(), remove_aliens.end());
 	remove_aliens.erase(unique(remove_aliens.begin(), remove_aliens.end()), remove_aliens.end());
 
 	//Remove bullets
 	for (int bullet : remove_bullets) bullets.erase(bullets.begin()+bullet);
 	for (int alien : remove_aliens) aliens.erase(aliens.begin()+alien);
+
 	if (aliens.size() <= 0)
    	{
 		current_player++;
 		remove_aliens.clear();
+		remove_bullets.clear();
 		reset_aliens();
 	}
 
@@ -171,7 +189,7 @@ void Logic::update()
 		{
 			Cannon& cannon = cannons[i].get();
 			cannon.set_brain(population[i]);
-			cannon.get_brain().set_fitness(0);
+			cannon.get_fitness() = 0;
 			cannon.set_best(false);
 			cannon.set_fired(false);
 			cannon.set_firing(false);
@@ -187,6 +205,8 @@ void Logic::draw(SDL_Renderer* renderer)
 	for (Bullet bullet : bullets) bullet.draw(renderer);
 	Cannon& cannon = cannons[current_player].get();	
 	cannon.draw(renderer);
+
+	Main::draw_font("Current fitness: " + to_string(cannon.get_fitness()), 10, 10);
 }
 
 void Logic::reset_aliens()

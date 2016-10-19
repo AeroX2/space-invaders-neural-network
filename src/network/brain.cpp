@@ -34,7 +34,7 @@ Matrix Brain::update(Matrix other_matrix)
 			//TODO Can f be less than 0?
 			//cout << f << '\n';
 			//fabs(f+1) because of -1 bias
-			if ((f < -1 || f > 1) && fabs(f+1) > 0.001) throw runtime_error("Input matrix is not normalised");
+			//if ((f < -1 || f > 1) && fabs(f+1) > 0.001) throw runtime_error("Input matrix is not normalised");
 			return f;
 		}
 	};

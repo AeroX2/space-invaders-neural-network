@@ -35,6 +35,9 @@ class Cannon
 
 		bool is_fired();
 		void set_fired(bool fired);
+
+		virtual float& get_fitness();
+		virtual void set_fitness(float fitness);
 	protected:
 		Cannon(Vector p, Brain brain);
 		bool firing;

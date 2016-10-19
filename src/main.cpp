@@ -1,19 +1,10 @@
 #include "main.hpp"
 
-//Windows MSYS
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-int WinMain()
+int main(int argc, char *argv[])
 {
 	Main::get_instance().run();
 	return 0;
 }
-#else
-int main()
-{
-	Main::get_instance().run();
-	return 0;
-}
-#endif
 
 Main::Main()
 {
@@ -111,6 +102,7 @@ bool Main::init()
 	Plotter::init(10);
 	Plotter::new_line(BLACK);
 	Plotter::new_line(RED);
+	//if (CONTROL_SWEEPER) Plotter::new_line(PURPLE);
 
 	return false;
 }

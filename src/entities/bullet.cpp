@@ -16,7 +16,7 @@ Bullet::Bullet(Vector p, int id)
 void Bullet::update() 
 {
 	p.y -= v.y;	
-	rectangle.y = round(p.y);
+	rectangle.y = round(p.y) - rectangle.h / 2;
 }
 
 void Bullet::draw(SDL_Renderer* renderer) 

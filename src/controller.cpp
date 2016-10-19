@@ -4,7 +4,7 @@ int Controller::generation = 0;
 
 bool Controller::compare_brains(Brain b1, Brain b2) { return b1.get_fitness() < b2.get_fitness(); }
 
-vector<Brain> Controller::epoch(vector<Brain> population, Control_Sweeper* control)
+vector<Brain> Controller::epoch(vector<Brain> population)
 {
 	//Sort pop
 	sort(population.begin(), population.end(), Controller::compare_brains);
@@ -28,7 +28,7 @@ vector<Brain> Controller::epoch(vector<Brain> population, Control_Sweeper* contr
 	cout << "Max fitness: " << best_fitness << '\n';
 	Plotter::add_point(0, average_fitness);
 	Plotter::add_point(1, best_fitness);
-	if (CONTROL_SWEEPER) Plotter::add_point(2, control->get_fitness(), false);
+	//if (CONTROL_SWEEPER) Plotter::add_point(2, control->get_fitness(), false);
 
 	vector<Brain> new_population = vector<Brain>();
 

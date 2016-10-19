@@ -19,7 +19,9 @@ class Plotter
 		static void new_line(unsigned char r, unsigned char g, unsigned char b);
 		static void add_point(int id, float y, bool ignore_largest=true);
 		static void resize(float blub);
+
 		static bool is_dirty();
+		static void set_dirty();
 	private:
 		static vector<vector<float>> points;
 		static vector<vector<float>> average_points;

@@ -72,8 +72,11 @@ Vector Vector::normalise()
 {
 	float length = distance();
 	Vector new_vector = Vector(x, y);
-	new_vector.x = new_vector.x / length;
-	new_vector.y = new_vector.y / length;
+	if (length != 0)
+	{
+		new_vector.x = new_vector.x / length;
+		new_vector.y = new_vector.y / length;
+	}
 	return new_vector;
 }
 

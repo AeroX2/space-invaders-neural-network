@@ -18,16 +18,26 @@ void Cannon::update(Alien alien)
 	//TODO Shouldn't this matrix always be a constants size?
 	Matrix matrix = Matrix(1,7+1);//* bullets.size() * 2 + 1);
 
-	int i = 0;
+	Vector normalised_position = p;
+	Vector normalised_velocity = v.normalise();
 
-	matrix.set(0,i++,p.x);
-	matrix.set(0,i++,p.y);
+	normalised_position.x = (normalised_position.x) / (SCREEN_WIDTH);
+	normalised_position.y = (normalised_position.y) / (SCREEN_HEIGHT);
+
+	Vector normalised_alien = alien.get();
+
+	normalised_alien.x = (normalised_alien.x) / (SCREEN_WIDTH);
+	normalised_alien.y = (normalised_alien.y) / (SCREEN_HEIGHT);
+
+	int i = 0;
+	matrix.set(0,i++,normalised_position.x);
+	matrix.set(0,i++,normalised_position.y);
+	matrix.set(0,i++,normalised_velocity.x);
+	matrix.set(0,i++,normalised_velocity.y);
 	matrix.set(0,i++,fired);
 
-	matrix.set(0,i++,alien.get().x);
-	matrix.set(0,i++,alien.get().y);
-	matrix.set(0,i++,alien.getv().x);
-	matrix.set(0,i++,alien.getv().y);
+	matrix.set(0,i++,normalised_alien.x);
+	matrix.set(0,i++,normalised_alien.y);
 
 	/*for (Bullet bullet: bullets)
 	{
@@ -43,15 +53,27 @@ void Cannon::update(Alien alien)
 	float speed = (output.get(0,0) - 0.5) * CANNON_SPEED;
 	v.x += speed;
 
+	if (v.x < 0.01 && v.x > -0.01) get_fitness() *= 0.8;
+
 	if (v.x > MAX_CANNON_SPEED) v.x = MAX_CANNON_SPEED; 
 	else if (v.x < -MAX_CANNON_SPEED) v.x = -MAX_CANNON_SPEED; 
 
 	p += v;
-	if (p.x < 0) p.x = 0;
-	else if (p.x > SCREEN_WIDTH-CANNON_WIDTH) p.x = SCREEN_WIDTH-CANNON_WIDTH;
+	if (p.x < 0) 
+	{
+		p.x = 0;
+		//if (get_fitness() > 0.01) get_fitness() *= 0.8;
+		get_fitness() -= 0.1;
+	}
+	else if (p.x > SCREEN_WIDTH) 
+	{
+		p.x = SCREEN_WIDTH;
+		//if (get_fitness() > 0.01) get_fitness() *= 0.8;
+		get_fitness() -= 0.1;
+	}
 
-	rectangle.x = round(p.x);
-	rectangle.y = round(p.y);
+	rectangle.x = round(p.x) - rectangle.w / 2;
+	rectangle.y = round(p.y) - rectangle.h / 2;
 }
 
 void Cannon::draw(SDL_Renderer* renderer)
@@ -114,6 +136,16 @@ bool Cannon::is_fired()
 void Cannon::set_fired(bool fired)
 {
 	this->fired = fired;
+}
+
+float& Cannon::get_fitness()
+{
+	return brain.get_fitness();
+}
+
+void Cannon::set_fitness(float fitness)
+{
+	brain.set_fitness(fitness);
 }
 
 Cannon* Cannon::create(Vector p, Brain brain)
