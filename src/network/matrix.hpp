@@ -4,6 +4,11 @@
 #include <vector>
 #include <iostream>
 
+//Windows MSYS
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	#include <stdexcept>
+#endif
+
 #include "../utils.hpp"
 
 using namespace std;

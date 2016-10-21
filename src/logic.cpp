@@ -67,6 +67,19 @@ void Logic::update()
 	vector<int> remove_aliens;
 	ticks++;
 
+	for (size_t bullet_id = 0; bullet_id < bullets.size(); bullet_id ++) 
+	{
+		Bullet& bullet = bullets[bullet_id];
+		bullet.update();
+		if (bullet.get().y < 0) 
+		{
+			cannons[bullet.get_id()].get().set_fired(false);
+			float& fitness = cannons[bullet.get_id()].get().get_fitness();
+			if (fitness > 0.01) fitness *= 0.65;
+			remove_bullets.push_back(bullet_id);
+		}
+	}
+	
 	for (size_t alien_id = 0; alien_id < aliens.size(); alien_id++)
 	{
 		Alien& alien = aliens[alien_id];
@@ -108,7 +121,7 @@ void Logic::update()
 					for (Alien& alien2 : aliens) alien2.getv().x *= 1.02;
 
 					cannons[bullet.get_id()].get().set_fired(false);
-					cannons[bullet.get_id()].get().get_fitness() += 1;
+					cannons[bullet.get_id()].get().get_fitness() += 5;
 
 					remove_bullets.push_back(bullet_id);
 					remove_aliens.push_back(alien_id);
@@ -125,19 +138,6 @@ void Logic::update()
 	}
 	
 	if (ticks > ALIEN_TICKS_TO_MOVE) ticks = 0;
-
-	for (size_t bullet_id = 0; bullet_id < bullets.size(); bullet_id ++) 
-	{
-		Bullet& bullet = bullets[bullet_id];
-		bullet.update();
-		if (bullet.get().y < 0) 
-		{
-			cannons[bullet.get_id()].get().set_fired(false);
-			float& fitness = cannons[bullet.get_id()].get().get_fitness();
-			if (fitness > 0.01) fitness *= 0.65;
-			remove_bullets.push_back(bullet_id);
-		}
-	}
 
 	//sort(remove_bullets.begin(), remove_bullets.end());
 	remove_bullets.erase(unique(remove_bullets.begin(), remove_bullets.end()), remove_bullets.end());
@@ -179,7 +179,8 @@ void Logic::update()
 		vector<Brain> population = vector<Brain>();
 		for (auto reference : cannons) 
 		{
-			Cannon& cannon = reference.get();	
+			Cannon& cannon = reference.get();
+			if (cannon.is_touched()) cannon.get_fitness() *= 0.5;
 			population.push_back(cannon.get_brain());
 		}
 		population = Controller::epoch(population);

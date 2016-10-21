@@ -53,7 +53,7 @@ void Cannon::update(Alien alien)
 	float speed = (output.get(0,0) - 0.5) * CANNON_SPEED;
 	v.x += speed;
 
-	if (v.x < 0.01 && v.x > -0.01) get_fitness() *= 0.8;
+	//fif (v.x < 0.01 && v.x > -0.01) if (get_fitness() > 0.01) get_fitness() *= 0.8;
 
 	if (v.x > MAX_CANNON_SPEED) v.x = MAX_CANNON_SPEED; 
 	else if (v.x < -MAX_CANNON_SPEED) v.x = -MAX_CANNON_SPEED; 
@@ -62,14 +62,12 @@ void Cannon::update(Alien alien)
 	if (p.x < 0) 
 	{
 		p.x = 0;
-		//if (get_fitness() > 0.01) get_fitness() *= 0.8;
-		get_fitness() -= 0.1;
+		touched = true;
 	}
 	else if (p.x > SCREEN_WIDTH) 
 	{
 		p.x = SCREEN_WIDTH;
-		//if (get_fitness() > 0.01) get_fitness() *= 0.8;
-		get_fitness() -= 0.1;
+		touched = true;
 	}
 
 	rectangle.x = round(p.x) - rectangle.w / 2;
@@ -86,6 +84,7 @@ void Cannon::draw(SDL_Renderer* renderer)
 void Cannon::new_position()
 {
 	this->p = Vector(SCREEN_WIDTH / 2, SCREEN_HEIGHT - CANNON_HEIGHT - CANNON_SPACER);
+	this->touched = false;
 }
 
 Vector& Cannon::get()
@@ -106,6 +105,11 @@ Brain& Cannon::get_brain()
 void Cannon::set_brain(Brain brain)
 {
 	this->brain = brain;
+}
+
+bool Cannon::is_touched()
+{
+	return touched;
 }
 
 bool Cannon::is_best()

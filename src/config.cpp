@@ -34,7 +34,7 @@ bool Config::read_from_file(string filename)
 	cout << "Combine by two points: " << COMBINE_TWO_POINT << '\n';
 	cout << "Reward: " << REWARD << '\n';
 	cout << "Punishment: " << PUNISHMENT << '\n';
-	cout << "Alien ticks to move" << ALIEN_TICKS_TO_MOVE << '\n';
+	cout << "Alien ticks to move: " << ALIEN_TICKS_TO_MOVE << '\n';
 	cout << "Tournament size: " << TOURNAMENT_SIZE << '\n';
 	cout << "Mutation chance: " << MUTATION_CHANCE << '\n';
 	cout << "Combine chance: " << COMBINE_CHANCE << '\n';

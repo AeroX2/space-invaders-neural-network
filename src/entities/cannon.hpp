@@ -27,6 +27,8 @@ class Cannon
 		Brain& get_brain();
 		void set_brain(Brain b);
 
+		bool is_touched();
+		
 		bool is_best();
 		void set_best(bool best);
 
@@ -40,6 +42,7 @@ class Cannon
 		virtual void set_fitness(float fitness);
 	protected:
 		Cannon(Vector p, Brain brain);
+		bool touched;
 		bool firing;
 		bool fired;
 		bool best;
