@@ -53,7 +53,7 @@ void Cannon::update(Alien alien)
 	float speed = (output.get(0,0) - 0.5) * CANNON_SPEED;
 	v.x += speed;
 
-	if (v.x < 0.01 && v.x > -0.01) get_fitness() *= 0.8;
+	if (v.x < 0.1 && v.x > -0.1) get_fitness() *= 0.8;
 
 	if (v.x > MAX_CANNON_SPEED) v.x = MAX_CANNON_SPEED; 
 	else if (v.x < -MAX_CANNON_SPEED) v.x = -MAX_CANNON_SPEED; 

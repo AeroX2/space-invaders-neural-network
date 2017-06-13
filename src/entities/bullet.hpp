@@ -18,6 +18,7 @@ class Bullet
 		virtual void draw(SDL_Renderer* renderer);
 		Vector& get();
 		int get_id();
+		SDL_Rect& getbox();
 	protected:
 		int id;
 		Vector v;

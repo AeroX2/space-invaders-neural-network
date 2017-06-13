@@ -34,3 +34,8 @@ int Bullet::get_id()
 {
 	return id;
 }
+
+SDL_Rect& Bullet::getbox()
+{
+	return rectangle;
+}

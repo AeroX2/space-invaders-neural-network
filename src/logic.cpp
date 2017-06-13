@@ -71,6 +71,7 @@ void Logic::update()
 	{
 		Alien& alien = aliens[alien_id];
 		Vector alien_p = alien.get();
+		SDL_Rect alien_box = alien.getbox();
 
 		if (ticks > ALIEN_TICKS_TO_MOVE) alien.update();
 
@@ -96,23 +97,18 @@ void Logic::update()
 		{
 			Bullet bullet = bullets[bullet_id];
 			Vector bullet_p = bullet.get();
-			if (alien_p.x - 50 < bullet_p.x && 
-				alien_p.x + 50 > bullet_p.x && 
-				alien_p.y - 50 < bullet_p.y && 
-				alien_p.y + 50 > bullet_p.y)
+			SDL_Rect bullet_box = bullet.getbox();
+
+			if (abs(alien_p.x - bullet_p.x) * 2 <= (alien_box.w + bullet_box.w) &&
+				abs(alien_p.y - bullet_p.y) * 2 <= (alien_box.h + bullet_box.h))
 			{
-				float distance = (alien_p - bullet_p).distance();
-				//cout << "distance: " << distance << endl;
-				if (distance < HIT_DISTANCE)
-				{
-					for (Alien& alien2 : aliens) alien2.getv().x *= 1.02;
+				for (Alien& alien2 : aliens) alien2.getv().x *= 1.02;
 
-					cannons[bullet.get_id()].get().set_fired(false);
-					cannons[bullet.get_id()].get().get_fitness() += 1;
+				cannons[bullet.get_id()].get().set_fired(false);
+				cannons[bullet.get_id()].get().get_fitness() += 1;
 
-					remove_bullets.push_back(bullet_id);
-					remove_aliens.push_back(alien_id);
-				}
+				remove_bullets.push_back(bullet_id);
+				remove_aliens.push_back(alien_id);
 			}
 		}
 

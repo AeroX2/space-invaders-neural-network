@@ -35,3 +35,8 @@ Vector& Alien::getv()
 {
 	return v;
 }
+
+SDL_Rect& Alien::getbox()
+{
+	return rectangle;
+}

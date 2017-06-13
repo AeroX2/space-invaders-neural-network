@@ -14,6 +14,7 @@ class Alien
 		void draw(SDL_Renderer* renderer);
 		Vector& get();
 		Vector& getv();
+		SDL_Rect& getbox();
 	private:
 		Vector p;
 		Vector v;
