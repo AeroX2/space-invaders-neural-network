@@ -1,0 +1,7 @@
+A quick note from past self
+
+Collision detection is still not perfect (sometimes misses)
+
+Fitness function negates score if the velocity is too low but it means you can't change direction without losing points
+BUT an interesting thing happened the cannon actually started to oscilate (move back and forth) because of the above fitness function
+it was still desirable to oscilate than stick to the edge and get a score of zero instead of negative!

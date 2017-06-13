@@ -175,7 +175,8 @@ void Logic::update()
 		vector<Brain> population = vector<Brain>();
 		for (auto reference : cannons) 
 		{
-			Cannon& cannon = reference.get();	
+			Cannon& cannon = reference.get();
+			if (cannon.is_touched()) cannon.get_fitness() *= 0.5;
 			population.push_back(cannon.get_brain());
 		}
 		population = Controller::epoch(population);

@@ -2,8 +2,12 @@
 
 mt19937& Utils::random_engine()
 {
-	static random_device device;
-	static mt19937 engine{device()};
+	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+		static mt19937 engine{(unsigned int)time(NULL)};
+	#else
+		static random_device device;
+		static mt19937 engine{device()};
+	#endif
 	return engine;
 }
 

@@ -16,8 +16,8 @@ void Alien::update()
 {
 	p.x += v.x;	
 
-	rectangle.x = round(p.x);
-	rectangle.y = round(p.y);
+	rectangle.x = round(p.x) - rectangle.w / 2;
+	rectangle.y = round(p.y) - rectangle.h / 2;
 }
 
 void Alien::draw(SDL_Renderer* renderer)

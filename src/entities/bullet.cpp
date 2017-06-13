@@ -5,10 +5,10 @@ Bullet::Bullet(Vector p, int id)
 	this->p = p;
 	this->id = id;
 
-	rectangle.x = p.x;
-	rectangle.y = p.y;
 	rectangle.w = BULLET_WIDTH;
 	rectangle.h = BULLET_HEIGHT;
+	rectangle.x = p.x - rectangle.w / 2;
+	rectangle.y = p.y;
 
 	v.y = BULLET_SPEED;
 }
