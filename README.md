@@ -11,4 +11,5 @@ $ ./buildandrun.sh
 $ cd bin  
 $ cmake .  
 $ make  
+$ ls
 ```
